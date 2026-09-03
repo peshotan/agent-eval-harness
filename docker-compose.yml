@@ -1,0 +1,11 @@
+services:
+  eval:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - path: .env
+        required: false
+    volumes:
+      - ./artifacts:/app/artifacts
+    command: ["--version"]

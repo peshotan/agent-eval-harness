@@ -51,6 +51,38 @@ model evaluator   agent evaluator -> observable trace
 
 Providers and target agents will produce normalized execution results. Metrics will evaluate those results independently, keeping provider SDKs and agent frameworks out of the core evaluation logic.
 
+## Development setup
+
+The current milestone provides the project shell and a versioned CLI entry point. Evaluation commands will be added in subsequent milestones.
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -e '.[dev]'
+
+python cli.py --version
+pytest -q
+```
+
+Copy `.env.example` to `.env` before configuring hosted providers. The deterministic local path will not require provider credentials.
+
+Runtime settings use the `AGENT_EVAL_` prefix and are validated at startup:
+
+| Variable | Default | Constraint |
+|---|---:|---|
+| `AGENT_EVAL_LOG_LEVEL` | `INFO` | `DEBUG`, `INFO`, `WARNING`, `ERROR`, or `CRITICAL` |
+| `AGENT_EVAL_MAX_CONCURRENCY` | `5` | Positive integer |
+| `AGENT_EVAL_TEST_TIMEOUT_SECONDS` | `60` | Positive number of seconds |
+
+Provider credentials remain optional and are never included in container build contexts.
+
+The same shell can be verified in Docker:
+
+```bash
+docker compose run --rm eval
+```
+
 ## Evaluation philosophy
 
 The harness prioritizes deterministic evidence whenever ground truth exists. LLM judges are useful for open-ended qualities such as faithfulness and goal completion, but their scores are probabilistic signals—not objective truth.
