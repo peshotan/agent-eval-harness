@@ -67,6 +67,16 @@ pytest -q
 
 Copy `.env.example` to `.env` before configuring hosted providers. The deterministic local path will not require provider credentials.
 
+Runtime settings use the `AGENT_EVAL_` prefix and are validated at startup:
+
+| Variable | Default | Constraint |
+|---|---:|---|
+| `AGENT_EVAL_LOG_LEVEL` | `INFO` | `DEBUG`, `INFO`, `WARNING`, `ERROR`, or `CRITICAL` |
+| `AGENT_EVAL_MAX_CONCURRENCY` | `5` | Positive integer |
+| `AGENT_EVAL_TEST_TIMEOUT_SECONDS` | `60` | Positive number of seconds |
+
+Provider credentials remain optional and are never included in container build contexts.
+
 The same shell can be verified in Docker:
 
 ```bash
