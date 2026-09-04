@@ -1,0 +1,27 @@
+[
+  {
+    "test_id": "agent_sales_001",
+    "category": "database_lookup",
+    "user_input": "Find total sales for Q3 2024 and calculate average deal size.",
+    "expected_tools": [
+      {
+        "name": "query_sales_db",
+        "required_arguments": {
+          "quarter": "Q3",
+          "year": 2024
+        }
+      },
+      {
+        "name": "calculate_average",
+        "required_arguments": {}
+      }
+    ],
+    "ground_truth": {
+      "total_sales": 1200000,
+      "average_deal_size": 24000
+    },
+    "reference_answer": "Total sales were $1.2M and average deal size was $24k.",
+    "optimal_steps": 4,
+    "max_allowed_steps": 6
+  }
+]
