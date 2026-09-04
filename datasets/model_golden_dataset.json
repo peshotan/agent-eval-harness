@@ -1,0 +1,22 @@
+[
+  {
+    "test_id": "model_math_001",
+    "category": "structured_reasoning",
+    "prompt": "A service processed 1200 requests and 30 failed. Return the failure rate as JSON.",
+    "expected_output": {
+      "failure_rate": 0.025
+    },
+    "output_schema": {
+      "type": "object",
+      "properties": {
+        "failure_rate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "required": ["failure_rate"],
+      "additionalProperties": false
+    }
+  }
+]

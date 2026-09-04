@@ -12,7 +12,7 @@ An extensible evaluation platform for language models and tool-using agents.
 
 ## Project status
 
-This repository is under incremental development. The architecture is defined, and implementation will land in focused pull requests with tests and reproducible validation at each milestone.
+This repository is under incremental development. The architecture and project shell are in place. Core typed contracts and deterministic metrics are the current implementation milestone; execution runners, providers, and end-to-end commands will follow in focused pull requests.
 
 See [DESIGN.md](DESIGN.md) for the goals, system boundaries, contracts, metric strategy, and delivery plan.
 
@@ -31,6 +31,16 @@ See [DESIGN.md](DESIGN.md) for the goals, system boundaries, contracts, metric s
 - Deterministic good-agent and bad-agent examples
 - Docker-based local execution
 - GitHub Actions quality gates that do not require paid model credentials
+
+## Implemented foundations
+
+- Strict, version-ready Pydantic contracts for test cases, execution results, trajectories, metrics, evaluation runs, and regressions
+- Validated example datasets for model and agent evaluation
+- A generic typed metric interface
+- Exact-match evaluation with optional text normalization
+- JSON parsing, JSON Schema validation, and required-field accuracy
+- Tool precision, recall, argument accuracy, and unknown-tool detection
+- Trajectory efficiency, repeated-call loop detection, and tool-failure scoring
 
 ## Architecture at a glance
 
