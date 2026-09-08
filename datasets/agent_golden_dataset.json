@@ -21,7 +21,7 @@
       "average_deal_size": 24000
     },
     "reference_answer": "Total sales were $1.2M and average deal size was $24k.",
-    "optimal_steps": 4,
+    "optimal_steps": 5,
     "max_allowed_steps": 6
   }
 ]
