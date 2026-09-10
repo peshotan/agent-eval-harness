@@ -12,7 +12,7 @@ An extensible evaluation platform for language models and tool-using agents.
 
 ## Project status
 
-This repository is under incremental development. The architecture, project shell, typed contracts, deterministic metrics, async runner, trajectory tracer, and deterministic agent-evaluation pipeline are in place. Model providers, reporting, regression comparison, and end-to-end commands will follow in focused pull requests.
+This repository is under incremental development. The architecture, typed contracts, deterministic metrics, async runner, agent pipeline, provider abstraction, model evaluator, and structured LLM judge are in place. Reporting, regression comparison, and end-to-end commands will follow in focused pull requests.
 
 See [DESIGN.md](DESIGN.md) for the goals, system boundaries, contracts, metric strategy, and delivery plan.
 
@@ -45,6 +45,11 @@ See [DESIGN.md](DESIGN.md) for the goals, system boundaries, contracts, metric s
 - Ordered observable trajectory recording with defensive snapshots
 - Deterministic good and bad agents that exercise the real evaluation architecture
 - Agent evaluation with per-test scores, thresholds, and run-level pass aggregates
+- Provider-neutral model requests and normalized responses
+- LiteLLM integration across hosted and local model backends
+- Repeated model evaluation with isolated provider failures
+- Structured LLM judging for faithfulness, goal completion, relevance, and hallucination
+- Token totals and available cost aggregates with explicit missing-price state
 
 ## Current agent-evaluation API
 
@@ -66,6 +71,32 @@ run = asyncio.run(AgentEvaluator(threshold=0.85).evaluate(cases, GoodMockAgent()
 assert run.aggregates["pass_rate"] == 1.0
 ```
 
+## Current model-evaluation API
+
+Hosted providers use the same evaluator contract as local test doubles:
+
+```python
+import asyncio
+import json
+from pathlib import Path
+
+from harness.evaluators import ModelEvaluator
+from harness.providers import LiteLLMProvider
+from harness.schemas import ModelTestCase
+
+payload = json.loads(Path("datasets/model_golden_dataset.json").read_text())
+cases = [ModelTestCase.model_validate(item) for item in payload]
+run = asyncio.run(
+    ModelEvaluator(
+        LiteLLMProvider(),
+        model="openai/gpt-4.1-mini",
+        repeats=3,
+    ).evaluate(cases)
+)
+```
+
+Pass an `LLMJudge` to `ModelEvaluator` to add repeated structured judge scores. Judge calls run at temperature zero; malformed and failed runs remain visible, and judge scores are explicitly marked as probabilistic.
+
 ## Architecture at a glance
 
 ```text
@@ -83,7 +114,7 @@ model evaluator   agent evaluator -> observable trace
  terminal / Markdown / JSON / CI gate
 ```
 
-Providers and target agents will produce normalized execution results. Metrics will evaluate those results independently, keeping provider SDKs and agent frameworks out of the core evaluation logic.
+Providers and target agents produce normalized execution results. Metrics evaluate those results independently, keeping provider SDKs and agent frameworks out of the core evaluation logic.
 
 ## Development setup
 
@@ -152,13 +183,13 @@ The CLI will use stable exit codes:
 
 ## Delivery milestones
 
-1. Architecture and initial documentation
+1. Architecture and initial design
 2. Python package and container skeleton
 3. Typed schemas and deterministic metrics
 4. Async runner, trajectory tracer, and mock-agent evaluation
 5. Model providers and LLM-as-a-Judge
 6. Regression engine, reporters, and CLI
-7. CI quality gates and documentation hardening
+7. CI quality gates and release hardening
 
 Each milestone will be delivered through a focused pull request. Tests and validation will grow with the implementation.
 
