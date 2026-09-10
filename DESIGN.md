@@ -176,13 +176,13 @@ Stable interfaces will support new:
 
 Development will proceed in small pull requests:
 
-1. architecture and project documentation;
+1. architecture and project design;
 2. project skeleton, packaging, and container setup;
 3. typed schemas and deterministic metrics;
 4. trajectory tracing, mock agents, and async agent evaluation;
 5. model providers, model evaluation, and LLM judging;
 6. aggregation, regression comparison, reporting, and CLI;
-7. CI quality gates and final documentation hardening.
+7. CI quality gates and final release hardening.
 
 Every milestone will include focused tests and an atomic commit history. The good mock agent must pass and the intentionally bad mock agent must perform materially worse before the system is considered complete.
 

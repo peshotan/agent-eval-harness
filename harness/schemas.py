@@ -49,6 +49,27 @@ class TokenUsage(StrictModel):
         return self
 
 
+class ModelRequest(StrictModel):
+    """Provider-neutral text generation request."""
+
+    model: str = Field(min_length=1)
+    prompt: str = Field(min_length=1)
+    system_prompt: str | None = None
+    temperature: float = Field(default=0.0, ge=0)
+    response_format: dict[str, JsonValue] | None = None
+    metadata: dict[str, JsonValue] = Field(default_factory=dict)
+
+
+class ModelResponse(StrictModel):
+    """Normalized provider response with observable usage and failures."""
+
+    model: str = Field(min_length=1)
+    content: str | None = None
+    usage: TokenUsage | None = None
+    provider_metadata: dict[str, JsonValue] = Field(default_factory=dict)
+    error: str | None = None
+
+
 class ToolExpectation(StrictModel):
     name: str = Field(min_length=1)
     required_arguments: dict[str, JsonValue] = Field(default_factory=dict)
